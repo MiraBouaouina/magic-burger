@@ -1,43 +1,62 @@
 import React, { Component } from 'react'
 import Burger from './Burger/Burger'
 import BuilderControls from './BuilderControls/BuilderControls'
+import axios from 'axios'
 class BurgerBuilder extends Component {
     state = {
         ingredients: [
             {
+                id: 0,
                 label: "salad",
-                count: 2,
-                price: 1
+                count: 0,
+                price: 1,
+                maxCount: 2
             },
             {
+                id: 1,
                 label: "cheese",
-                count: 1,
-                price: 2
+                count: 0,
+                price: 2,
+                maxCount: 2
 
             },
             {
+                id: 2,
                 label: "escalope",
                 count: 0,
-                price: 3
+                price: 3,
+                maxCount: 2
             },
             {
+                id: 3,
                 label: "meat",
                 count: 0,
-                price: 4
+                price: 4,
+                maxCount: 2
             }
         ],
         total: 4 //prix initial
     }
-    changeBurgerHandler = (label) => {
-        if (label == "salad") {
-            const newing = [...this.state.ingredients]
-            newing[0].count = newing[0].count + 1
-            this.setState(
-                { ingredients: newing }
-            )
-
+    addOrRemoveIngredient = (id, action) => {
+        const newIngredients = [...this.state.ingredients]
+        let newTotalPrice = this.state.total
+        const i = newIngredients.findIndex(ingredient => {
+            return ingredient.id === id
+        })
+        if (action === "add") {
+            newIngredients[i].count++
+            newTotalPrice += newIngredients[i].price
         }
-
+        else if (action === "remove") {
+            newIngredients[i].count--
+            newTotalPrice -= newIngredients[i].price
+        }
+        this.setState(
+            {
+                ingredients: newIngredients,
+                total: newTotalPrice
+            }
+        )
     }
 
 
@@ -47,8 +66,10 @@ class BurgerBuilder extends Component {
         return (
             <div>
                 <Burger ingredientsProps={this.state.ingredients} />
-                <BuilderControls ingredientsProps={this.state.ingredients} total={this.state.total}
-                    change={this.changeBurgerHandler} />
+                <BuilderControls
+                    ingredientsProps={this.state.ingredients}
+                    total={this.state.total}
+                    addOrRemoveIngredient={this.addOrRemoveIngredient} />
 
 
             </div>

@@ -7,12 +7,18 @@ const builderControls = (props) => {
 
     let buildControlList = props.ingredientsProps.map(
         (ingredient) => {
-            return <BuilderControl label={ingredient.label} count={ingredient.count} change={() => this.props.change({ ingredient.label })} />
-        }
-    
+            return <BuilderControl label={ingredient.label}
+                count={ingredient.count}
+                added={() => { props.addOrRemoveIngredient(ingredient.id, "add") }}
+                removed={() => { props.addOrRemoveIngredient(ingredient.id, "remove") }}
+                disableRemoving={!ingredient.count}
+                disableAdding={ingredient.count >= ingredient.maxCount}
+                key={ingredient.id} />
+        })
+
     return (
         <div className={classes.BuildControls}>
-            <p> Total price: {props.total} DT </p>
+            <p> Total price: {(props.total).toFixed(2)} DT </p>
             <div>
                 {buildControlList}
             </div>

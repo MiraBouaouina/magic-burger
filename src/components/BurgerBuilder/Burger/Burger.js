@@ -10,10 +10,13 @@ const burger = (props) => {
             ingredientsComponents.push(<Ingredient type={ingredient.label} />)
         }
     }
+    let msg = null
+    if (ingredientsComponents.length === 0) { msg = <p> Please start adding ingredients !! </p> }
 
     return (
         <div className={classes.Burger}>
             <Ingredient type="bread-top" />
+            {msg}
             {ingredientsComponents}
             <Ingredient type="bread-bottom" />
         </div>
